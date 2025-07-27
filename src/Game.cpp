@@ -9,6 +9,7 @@
 
 Game::Game()
 {
+    windowSettings.drawFPS = false;
     windowSettings.windowWidth = 800;
     windowSettings.windowHeight = 450;
     windowSettings.windowTitle = "proc-gen";
@@ -25,42 +26,32 @@ void Game::Setup()
     rlImGuiSetup(true);
     ImGuiIO& io = ImGui::GetIO();
     io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
-
     systemManager = std::make_unique<SystemManager>();
+    world = std::make_unique<World>(windowSettings.windowWidth / 3, windowSettings.windowHeight / 3);
 
     SetTargetFPS(120);
     systemManager->Init();
 }
 
-void Game::DrawUI()
-{
-    ImGui::SetNextWindowPos(ImVec2(0, static_cast<float>(windowSettings.windowHeight) - 80), ImGuiCond_Always);
-    ImGui::SetNextWindowSize(ImVec2(static_cast<float>(windowSettings.windowWidth), 80), ImGuiCond_Always);
 
-    ImGui::Begin("BottomWindow", nullptr, ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoTitleBar);
-
-    if (ImGui::Button("Regenerate"))
-    {
-
-    }
-
-    ImGui::NewLine();
-    ImGui::End();
-}
 void Game::Update()
 {
     while (!WindowShouldClose())
     {
-
         systemManager->Update(GetFrameTime());
+        world->Tick();
 
         BeginDrawing();
         rlImGuiBegin();
 
-        DrawUI();
         ClearBackground(RAYWHITE);
 
-        DrawFPS(0,0);
+        world->Draw();
+
+        if (windowSettings.drawFPS)
+        {
+            DrawFPS(0,0);
+        }
 
         rlImGuiEnd();
         EndDrawing();

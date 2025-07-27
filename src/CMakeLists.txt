@@ -4,6 +4,12 @@
         Game.h
         systems/System.h
         systems/SystemManager.h
+        World.h
+        World.cpp
+        algorithms/IProceduralInterface.h
+        algorithms/RandomWalk.cpp
+        algorithms/RandomWalk.h
+        Cell.h
 )
 target_sources(${PROJECT_NAME} PRIVATE main.cpp)
 target_include_directories(${PROJECT_NAME} PRIVATE
